@@ -59,7 +59,7 @@
   "keywords": ["error", "handling", "error-handling", "try-catch", "typescript"],
   "author": "moeenn",
   "license": "ISC",
-  "description": "Easier error handling without try-catch",
+  "description": "Easy type-safe error handling without try-catch",
   "devDependencies": {
     "@swc/cli": "^0.3.12",
     "@swc/core": "^1.5.5",
