@@ -1,6 +1,6 @@
 {
   "name": "@moeenn/recover",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "moeenn",
   "license": "ISC",
   "description": "Easy type-safe error handling without try-catch",
