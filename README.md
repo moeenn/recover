@@ -9,8 +9,55 @@ $ npm i @moeenn/recover
 
 
 ## Usage
-```ts
-// TODO
+```js
+import { recover } from "@moeenn/recover"
+
+/**
+ * Example action
+ * @returns {number}
+ */
+function syncAction() {
+  return 42
+}
+
+/** @returns {void} */
+function main() {
+  const result = recover(() => syncAction())
+  if (result.error) {
+    /** in case of error, res.error will be of type Error (instead of unknown) */
+    console.error("Error: ", result.error.message)
+    return
+  }
+
+  /** type is automatically inferred as number */
+  console.log(result.ok)
+}
+
+main()
+```
+
+```js
+import { recoverAsync } from "@moeenn/recover"
+
+/** @returns {Promise<void>} */
+async function main() {
+  const url = "https://jsonplaceholder.typicode.com/todos/1"
+  const res = await recoverAsync(() => fetch(url))
+  if (res.error) {
+    console.error("Error: failed to fetch", res.error.message)
+    return
+  }
+
+  const body = await recoverAsync(() => res.ok.json())
+  if (body.error) {
+    console.error("Error: failed to parse response as JSON", body.error.message)
+    return
+  }
+
+  console.log(body.ok)
+}
+
+main().catch(console.error)
 ```
 
 

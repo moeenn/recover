@@ -25,7 +25,8 @@
     "type-check": "tsc --noEmit",
     "test": "jest",
     "fmt": "npx prettier --write ./src/",
-    "lint": "npx eslint --fix ./src/ --ext .ts"
+    "lint": "npx eslint --fix ./src/ --ext .ts",
+    "publish": "npm publish --access=public"
   },
   "jest": {
     "transform": {
