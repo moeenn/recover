@@ -60,6 +60,17 @@ async function main() {
 main().catch(console.error)
 ```
 
+```js
+import { recover, Ok, Err } from "@moeenn/recover"
+
+// manually handle errors of unknown type
+const result = recover(() => action(), (error: unknown): Err => {
+  // convert `unknown` error into Error instance
+  const err = new Error("TODO")
+  return { ok: null, error: err }
+})
+```
+
 
 ## Running test
 ```bash
