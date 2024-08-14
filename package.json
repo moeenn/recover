@@ -26,7 +26,7 @@
     "test": "jest",
     "fmt": "npx prettier --write ./src/",
     "lint": "npx eslint --fix ./src/ --ext .ts",
-    "publish": "npm publish --access=public"
+    "pub": "npm publish --access=public"
   },
   "jest": {
     "transform": {
