@@ -1,25 +1,14 @@
-type ok<T> = { ok: T; error: null }
-type error = { ok: null; error: Error }
+export type Ok<T> = { ok: T; error: null }
+export type Err = { ok: null; error: Error }
+export type Result<T> = Ok<T> | Err
 
-/**
- * @template T
- * @param {T} result
- * @returns {ok<T>}
- */
-const ok = <T>(result: T): ok<T> => ({ ok: result, error: null })
+const ok = <T>(result: T): Ok<T> => ({ ok: result, error: null })
+const error = (error: Error): Err => ({ ok: null, error })
 
-/**
- * @param {Error} error
- * @returns {error}
- */
-const error = (error: Error): error => ({ ok: null, error })
-
-/**
- * @template T
- * @param {() => T} cb
- * @returns {ok<T> | error}
- */
-export function recover<T>(cb: () => T): ok<T> | error {
+export function recover<T>(
+  cb: () => T,
+  handleUnknown: ((err: unknown) => Err) | undefined = undefined,
+): Result<T> {
   let result: T
 
   try {
@@ -27,21 +16,22 @@ export function recover<T>(cb: () => T): ok<T> | error {
   } catch (err) {
     if (err instanceof Error) {
       return error(err)
+    } else {
+      if (handleUnknown) {
+        return handleUnknown(err)
+      }
     }
+
     return error(new Error("Unknown error occured"))
   }
 
   return ok(result)
 }
 
-/**
- * @template T
- * @param {() => Promise<T>} cb
- * @returns {Promise<ok<T> | error>}
- */
 export async function recoverAsync<T>(
   cb: () => Promise<T>,
-): Promise<ok<T> | error> {
+  handleUnknown: ((err: unknown) => Err) | undefined = undefined,
+): Promise<Result<T>> {
   let result: T
 
   try {
@@ -49,7 +39,12 @@ export async function recoverAsync<T>(
   } catch (err) {
     if (err instanceof Error) {
       return error(err)
+    } else {
+      if (handleUnknown) {
+        return handleUnknown(err)
+      }
     }
+
     return error(new Error("Unknown error occured"))
   }
 
