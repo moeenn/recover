@@ -42,3 +42,13 @@ test("recover async function: error returned", async () => {
   expect(result.ok).toBeNull()
   expect(result.error).toBeInstanceOf(Error)
 })
+
+test("consider NaN value as error", async () => {
+  let result = recover(() => parseInt("abc"))
+  expect(result.ok).toBeFalsy()
+  expect(result.error).toBeInstanceOf(Error)
+
+  result = await recoverAsync(async () => parseFloat("xyz"))
+  expect(result.ok).toBeFalsy()
+  expect(result.error).toBeInstanceOf(Error)
+})

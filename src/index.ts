@@ -25,6 +25,13 @@ export function recover<T>(
     return error(new Error("Unknown error occured"))
   }
 
+  // consider return value of NaN an error
+  if (typeof result == "number") {
+    if (isNaN(result)) {
+      return error(new Error("Invalid number"))
+    }
+  }
+
   return ok(result)
 }
 
@@ -46,6 +53,13 @@ export async function recoverAsync<T>(
     }
 
     return error(new Error("Unknown error occured"))
+  }
+
+  // consider return value of NaN an error
+  if (typeof result == "number") {
+    if (isNaN(result)) {
+      return error(new Error("Invalid number"))
+    }
   }
 
   return ok(result)
