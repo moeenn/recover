@@ -2,8 +2,8 @@ export type Ok<T> = { ok: T; error: null }
 export type Err = { ok: null; error: Error }
 export type Result<T> = Ok<T> | Err
 
-const ok = <T>(result: T): Ok<T> => ({ ok: result, error: null })
-const error = (error: Error): Err => ({ ok: null, error })
+export const Ok = <T>(result: T): Ok<T> => ({ ok: result, error: null })
+export const Err = (error: Error): Err => ({ ok: null, error })
 
 export function recover<T>(
   cb: () => T,
@@ -15,24 +15,24 @@ export function recover<T>(
     result = cb()
   } catch (err) {
     if (err instanceof Error) {
-      return error(err)
+      return Err(err)
     } else {
       if (handleUnknown) {
         return handleUnknown(err)
       }
     }
 
-    return error(new Error("Unknown error occured"))
+    return Err(new Error("Unknown error occured"))
   }
 
   // consider return value of NaN an error
   if (typeof result == "number") {
     if (isNaN(result)) {
-      return error(new Error("Invalid number"))
+      return Err(new Error("Invalid number"))
     }
   }
 
-  return ok(result)
+  return Ok(result)
 }
 
 export async function recoverAsync<T>(
@@ -45,22 +45,22 @@ export async function recoverAsync<T>(
     result = await cb()
   } catch (err) {
     if (err instanceof Error) {
-      return error(err)
+      return Err(err)
     } else {
       if (handleUnknown) {
         return handleUnknown(err)
       }
     }
 
-    return error(new Error("Unknown error occured"))
+    return Err(new Error("Unknown error occured"))
   }
 
   // consider return value of NaN an error
   if (typeof result == "number") {
     if (isNaN(result)) {
-      return error(new Error("Invalid number"))
+      return Err(new Error("Invalid number"))
     }
   }
 
-  return ok(result)
+  return Ok(result)
 }

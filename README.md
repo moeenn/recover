@@ -9,6 +9,9 @@ $ npm i @moeenn/recover
 
 
 ## Usage
+
+#### Handling synchronous errors
+
 ```js
 import { recover } from "@moeenn/recover"
 
@@ -36,6 +39,9 @@ function main() {
 main()
 ```
 
+
+#### Handling asynchronous errors
+
 ```js
 import { recoverAsync } from "@moeenn/recover"
 
@@ -60,15 +66,25 @@ async function main() {
 main().catch(console.error)
 ```
 
+
+#### Manually handle unknown errors 
+
 ```js
 import { recover, Ok, Err } from "@moeenn/recover"
 
 // manually handle errors of unknown type
-const result = recover(() => action(), (error: unknown): Err => {
+const result = recover(() => action(), (error: unknown) => {
   // convert `unknown` error into Error instance
-  const err = new Error("TODO")
-  return { ok: null, error: err }
+  return Err(new Error("TODO"))
 })
+```
+
+
+#### Handling of `NaN` return values
+
+```js
+const result = recover(() => parseInt("abc"))
+// result will be Err type and not Ok<number>
 ```
 
 
